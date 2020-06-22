@@ -36,5 +36,5 @@ class Plotter():
         # self.ax.ylim(0, max(y) * 1.1)
 
     def plot(self):
-        a = anim.FuncAnimation(self.fig, self.update, self.gen_func)
+        a = anim.FuncAnimation(self.fig, self.update, self.gen_func, repeat=False)
         plt.show()

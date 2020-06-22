@@ -11,10 +11,12 @@ def distance(city1: dict, city2: dict):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--file", help="Data file to use", choices=[])
+    parser.add_argument("--file", help="Data file to use", choices=["chn31", "chn144", "att48"], default="chn31")
+    args = parser.parse_args()
+
     cities = []
     points = []
-    with open('./data/chn31.txt') as f:
+    with open(f'./data/{args.file}.txt') as f:
         for line in f.readlines():
             city = line.split(' ')
             cities.append(dict(index=int(city[0]), x=int(city[1]), y=int(city[2])))
@@ -26,7 +28,7 @@ def main():
         for j in range(rank):
             row.append(distance(cities[i], cities[j]))
         cost_matrix.append(row)
-    aco = ACO(10, 100, 1.0, 10.0, 0.5, 10, 2)
+    aco = ACO(10, 100, 1.0, 10.0, 0.5, 10, 2, args)
     graph = Graph(cost_matrix, rank)
     aco.add_graph(graph)
     # path, cost = aco.solve(graph)

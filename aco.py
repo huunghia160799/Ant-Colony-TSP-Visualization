@@ -16,7 +16,7 @@ class Graph(object):
 
 class ACO(object):
     def __init__(self, ant_count: int, generations: int, alpha: float, beta: float, rho: float, q: int,
-                 strategy: int):
+                 strategy: int, args):
         """
         :param ant_count:
         :param generations:
@@ -36,7 +36,7 @@ class ACO(object):
         self.points = []
         self.cities = []
         points = []
-        with open('./data/chn31.txt') as f:
+        with open(f'./data/{args.file}.txt') as f:
             for line in f.readlines():
                 city = line.split(' ')
                 self.cities.append(dict(index=int(city[0]), x=int(city[1]), y=int(city[2])))
