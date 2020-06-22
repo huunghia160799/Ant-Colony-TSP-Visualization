@@ -1,5 +1,6 @@
 import random
-
+# from plot import plot
+import matplotlib.pyplot as plt
 
 class Graph(object):
     def __init__(self, cost_matrix: list, rank: int):
@@ -32,6 +33,14 @@ class ACO(object):
         self.ant_count = ant_count
         self.generations = generations
         self.update_strategy = strategy
+        self.points = []
+        self.cities = []
+        points = []
+        with open('./data/chn31.txt') as f:
+            for line in f.readlines():
+                city = line.split(' ')
+                self.cities.append(dict(index=int(city[0]), x=int(city[1]), y=int(city[2])))
+                self.points.append((int(city[1]), int(city[2])))
 
     def _update_pheromone(self, graph: Graph, ants: list):
         for i, row in enumerate(graph.pheromone):
@@ -41,10 +50,11 @@ class ACO(object):
                     graph.pheromone[i][j] += ant.pheromone_delta[i][j]
 
     # noinspection PyProtectedMember
-    def solve(self, graph: Graph):
+    def solve(self):
         """
         :param graph:
         """
+        graph = self.graph
         best_cost = float('inf')
         best_solution = []
         for gen in range(self.generations):
@@ -59,10 +69,12 @@ class ACO(object):
                     best_solution = [] + ant.tabu
                 # update pheromone
                 ant._update_pheromone_delta()
+            yield self.points, best_solution
             self._update_pheromone(graph, ants)
-            # print('generation #{}, best cost: {}, path: {}'.format(gen, best_cost, best_solution))
-        return best_solution, best_cost
+            print('generation #{}, best cost: {}, path: {}'.format(gen, best_cost, best_solution))
 
+    def add_graph(self, graph: Graph):
+        self.graph = graph
 
 class _Ant(object):
     def __init__(self, aco: ACO, graph: Graph):

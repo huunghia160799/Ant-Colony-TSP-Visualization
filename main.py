@@ -1,7 +1,8 @@
 import math
 
 from aco import ACO, Graph
-from plot import plot
+from plot import Plotter
+import argparse
 
 
 def distance(city1: dict, city2: dict):
@@ -9,6 +10,8 @@ def distance(city1: dict, city2: dict):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--file", help="Data file to use", choices=[])
     cities = []
     points = []
     with open('./data/chn31.txt') as f:
@@ -25,9 +28,12 @@ def main():
         cost_matrix.append(row)
     aco = ACO(10, 100, 1.0, 10.0, 0.5, 10, 2)
     graph = Graph(cost_matrix, rank)
-    path, cost = aco.solve(graph)
-    print('cost: {}, path: {}'.format(cost, path))
-    plot(points, path)
+    aco.add_graph(graph)
+    # path, cost = aco.solve(graph)
+    # print('cost: {}, path: {}'.format(cost, path))
+    plotter = Plotter(aco.solve)
+    plotter.plot()
+    # plot(points, path)
 
 if __name__ == '__main__':
     main()
